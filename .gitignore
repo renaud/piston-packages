@@ -39,12 +39,13 @@ scala-2.13-build/manifest.txt
 scala-2.13-build/*.class
 scala-2.13-build/test.scala
 
-# Large binary files in scala-2.13-build (users can download from official sources)
-scala-2.13-build/jdk/          # 184MB - Bundled Java (download from OpenJDK)
-scala-2.13-build/lib/          # 23MB - Scala libraries (download from Scala)
-scala-2.13-build/doc/          # 120KB - Documentation
-scala-2.13-build/man/          # 48KB - Man pages
-scala-2.13-build/bin/          # 80KB - Scala binaries
+# Large binary files - DO NOT COMMIT (download from official sources when rebuilding)
+scala-2.13-build/jdk
+scala-2.13-build/lib
+scala-2.13-build/doc
+scala-2.13-build/man
+scala-2.13-build/bin
+scala-2.13.16.pkg.tar.gz
 
 # Build artifacts (if rebuilding package)
 *.tar.gz.tmp
@@ -60,7 +61,6 @@ piston_data/
 
 # OS files
 Thumbs.db
-.DS_Store
 .AppleDouble
 .LSOverride
 ._*
@@ -69,4 +69,3 @@ Thumbs.db
 test_*.scala
 Test*.scala
 temp*.scala
-
