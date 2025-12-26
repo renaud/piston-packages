@@ -1,43 +1,21 @@
 #!/usr/bin/env bash
 
-# Compile scala classes into a jar file
-scalac "$@" -d out.jar
+# Interpreter mode: Validate syntax only (fast check)
+# The scala command will do the actual compilation and execution in one step
 
-# Create the Manifest and include scala lib jars:
-# NOTE: - entry point will consider:
-#         1. object with main method: object Foo { def main(args: Array[String]): Unit = ... }
-#         2. object extending App: object Foo extends App { ... }
-#       - scala lib jars will be added to the class path in order to run the jar properly
-
-# Try to find main class - prioritize explicit main method, then App trait
-# First, try to find object with main method (search for "def main" in the file)
-if grep -q "def main" "$1" 2>/dev/null; then
-    # Extract object name that contains main method
-    MAIN_CLASS=$(grep "^object " "$1" | sed 's/object \([A-Za-z][A-Za-z0-9]*\).*/\1/' | head -1)
+# Basic syntax validation - just check if the file has valid Scala structure
+if [ ! -f "$1" ]; then
+    echo "Error: File not found: $1"
+    exit 1
 fi
 
-# If not found, try App trait
-if [ -z "$MAIN_CLASS" ]; then
-    MAIN_CLASS=$(grep "extends App" "$1" | sed 's/.*object \([A-Za-z][A-Za-z0-9]*\).*/\1/' | head -1)
-fi
-
-if [ -z "$MAIN_CLASS" ]; then
-    echo "Error: Could not find main class. Please use either:"
+# Quick validation: check for basic Scala object structure
+if ! grep -qE "(object [A-Za-z]|class [A-Za-z])" "$1" 2>/dev/null; then
+    echo "Error: No valid Scala object or class found. Please use either:"
     echo "  - object Foo { def main(args: Array[String]): Unit = ... }"
     echo "  - object Foo extends App { ... }"
     exit 1
 fi
 
-# Get the directory where this script is located (the package root)
-SCALA_HOME="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
-# Build classpath with Scala libraries
-SCALA_LIBS=$(ls "$SCALA_HOME"/lib/*.jar 2>/dev/null | tr '\n' ' ' | sed 's/ $//' | sed 's/ / /g')
-
-echo "Main-Class: $MAIN_CLASS
-Class-Path: $SCALA_LIBS
-
-" > manifest.txt
-
-# Update the jar with the manifest
-jar ufm out.jar manifest.txt
+# Success - actual compilation happens during run phase
+exit 0
