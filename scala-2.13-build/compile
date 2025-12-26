@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+# Compile scala classes into a jar file
+scalac "$@" -d out.jar
+
+# Create the Manifest and include scala lib jars:
+# NOTE: - entry point will consider:
+#         1. object with main method: object Foo { def main(args: Array[String]): Unit = ... }
+#         2. object extending App: object Foo extends App { ... }
+#       - scala lib jars will be added to the class path in order to run the jar properly
+
+# Try to find main class - prioritize explicit main method, then App trait
+MAIN_CLASS=$(grep -oP 'object\s+\K[a-zA-Z][a-zA-Z0-9]*(?=\s*\{[^}]*def\s+main\s*\([^)]*\)\s*:\s*Unit)' $1 | head -1)
+
+if [ -z "$MAIN_CLASS" ]; then
+    # Fallback to App trait
+    MAIN_CLASS=$(grep -oP 'object\s+\K[a-zA-Z][a-zA-Z0-9]*(?=\s+extends\s+App)' $1 | head -1)
+fi
+
+if [ -z "$MAIN_CLASS" ]; then
+    echo "Error: Could not find main class. Please use either:"
+    echo "  - object Foo { def main(args: Array[String]): Unit = ... }"
+    echo "  - object Foo extends App { ... }"
+    exit 1
+fi
+
+echo "Main-Class: $MAIN_CLASS
+Class-Path: $(echo $JAVA_HOME/lib/*.jar | sed 's/\s/\n  /g')
+
+" > manifest.txt
+
+# Update the jar with the manifest
+jar ufm out.jar manifest.txt

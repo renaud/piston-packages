@@ -1,0 +1,6 @@
+{
+  "language": "scala",
+  "version": "2.13.16",
+  "aliases": ["scala2", "scala2.13"],
+  "build_platform": "docker-debian"
+}
