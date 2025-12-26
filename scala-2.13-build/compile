@@ -10,11 +10,15 @@ scalac "$@" -d out.jar
 #       - scala lib jars will be added to the class path in order to run the jar properly
 
 # Try to find main class - prioritize explicit main method, then App trait
-MAIN_CLASS=$(grep -oP 'object\s+\K[a-zA-Z][a-zA-Z0-9]*(?=\s*\{[^}]*def\s+main\s*\([^)]*\)\s*:\s*Unit)' $1 | head -1)
+# First, try to find object with main method (search for "def main" in the file)
+if grep -q "def main" "$1" 2>/dev/null; then
+    # Extract object name that contains main method
+    MAIN_CLASS=$(grep "^object " "$1" | sed 's/object \([A-Za-z][A-Za-z0-9]*\).*/\1/' | head -1)
+fi
 
+# If not found, try App trait
 if [ -z "$MAIN_CLASS" ]; then
-    # Fallback to App trait
-    MAIN_CLASS=$(grep -oP 'object\s+\K[a-zA-Z][a-zA-Z0-9]*(?=\s+extends\s+App)' $1 | head -1)
+    MAIN_CLASS=$(grep "extends App" "$1" | sed 's/.*object \([A-Za-z][A-Za-z0-9]*\).*/\1/' | head -1)
 fi
 
 if [ -z "$MAIN_CLASS" ]; then
@@ -24,8 +28,14 @@ if [ -z "$MAIN_CLASS" ]; then
     exit 1
 fi
 
+# Get the directory where this script is located (the package root)
+SCALA_HOME="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Build classpath with Scala libraries
+SCALA_LIBS=$(ls "$SCALA_HOME"/lib/*.jar 2>/dev/null | tr '\n' ' ' | sed 's/ $//' | sed 's/ / /g')
+
 echo "Main-Class: $MAIN_CLASS
-Class-Path: $(echo $JAVA_HOME/lib/*.jar | sed 's/\s/\n  /g')
+Class-Path: $SCALA_LIBS
 
 " > manifest.txt
 

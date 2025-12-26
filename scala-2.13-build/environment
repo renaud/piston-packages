@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-# Scala requires JAVA_HOME to be set
-export JAVA_HOME=$PWD
-export PATH=$PWD/bin:$PATH
+# Use bundled JDK
+export JAVA_HOME=$PWD/jdk
+export PATH=$PWD/jdk/bin:$PWD/bin:$PATH

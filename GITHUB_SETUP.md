@@ -3,7 +3,7 @@
 ## Step 1: Create GitHub Repository
 
 1. Go to https://github.com/new
-2. Repository name: `steacher-piston-packages`
+2. Repository name: `piston-packages`
 3. Description: "Custom Piston packages for Steacher (Scala 2.13)"
 4. Make it **Public** (required for GitHub Pages)
 5. Click "Create repository"
@@ -42,9 +42,8 @@
 2. Name the file: `index` (no extension)
 3. Paste this content:
    ```
-   scala,2.13.16,9202d928f30eea25c0ff4c1f3ee11002bc937d605900214948f15ee664441be6,https://github.com/YOUR_USERNAME/steacher-piston-packages/releases/download/v1.0.0/scala-2.13.16.pkg.tar.gz
+   scala,2.13.16,9202d928f30eea25c0ff4c1f3ee11002bc937d605900214948f15ee664441be6,https://github.com/renaud/piston-packages/releases/download/v1.0.0/scala-2.13.16.pkg.tar.gz
    ```
-4. **IMPORTANT**: Replace `YOUR_USERNAME` with your actual GitHub username
 5. Commit the file (click "Commit new file")
 
 ## Step 5: Get Your Index URL
@@ -52,10 +51,10 @@
 After GitHub Pages is enabled (takes 1-2 minutes), your index will be available at:
 
 ```
-https://YOUR_USERNAME.github.io/steacher-piston-packages/index
+https://renaud.github.io/piston-packages/index
 ```
 
-Replace `YOUR_USERNAME` with your actual GitHub username.
+
 
 ## Step 6: Configure Piston to Use Your Custom Index
 
@@ -71,12 +70,10 @@ cd sandbox_executor
 
 docker run --privileged \
   -v $PWD/piston_data:/piston \
-  -e PISTON_REPO_URL=https://YOUR_USERNAME.github.io/steacher-piston-packages/index \
+  -e PISTON_REPO_URL=https://renaud.github.io/piston-packages/index \
   -dit -p 2000:2000 --name piston_api \
   ghcr.io/engineer-man/piston
 ```
-
-**IMPORTANT**: Replace `YOUR_USERNAME` with your actual GitHub username.
 
 ## Step 7: Install Scala 2.13.16
 
