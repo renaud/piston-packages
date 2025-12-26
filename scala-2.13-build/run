@@ -1,12 +1,5 @@
 #!/usr/bin/env bash
 
-# Interpreter mode: Use scala command to compile and execute in one step
-# This skips the JAR creation overhead while still compiling to bytecode
-
-# First argument is the source file
-SOURCE_FILE="$1"
+# Run jar file
 shift
-
-# Execute using scala interpreter
-# The -nc flag disables the REPL startup message for cleaner output
-scala "$SOURCE_FILE" "$@"
+java -jar out.jar "$@"

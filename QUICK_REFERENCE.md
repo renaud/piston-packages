@@ -42,14 +42,13 @@ python3 test_scala_2.13.py
 
 - **File**: `scala-2.13.16.pkg.tar.gz`
 - **Size**: 86MB
-- **SHA256**: `b46d8947989638e20326c3b9766ff66b3b4d0db6b6b4589d1ae7ed0b11084acd`
+- **SHA256**: `b27502b0e3f4c525571ea7bfd8f936b9de0b33e9fab80f02ecee24da80d82b01`
 - **Aliases**: `scala2`, `scala2.13`
-- **Mode**: Interpreter (faster execution, ~400ms latency)
 
 ## Index File Format
 
 ```
-scala,2.13.16,b46d8947989638e20326c3b9766ff66b3b4d0db6b6b4589d1ae7ed0b11084acd,https://github.com/YOUR_USERNAME/steacher-piston-packages/releases/download/v1.0.0/scala-2.13.16.pkg.tar.gz
+scala,2.13.16,b27502b0e3f4c525571ea7bfd8f936b9de0b33e9fab80f02ecee24da80d82b01,https://github.com/YOUR_USERNAME/steacher-piston-packages/releases/download/v1.0.0/scala-2.13.16.pkg.tar.gz
 ```
 
 ## Supported Syntax
